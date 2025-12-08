@@ -1,10 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>ماشین‌حساب — UI</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<main class="calculator" role="main" aria-label="ماشین‌حساب">
+
+    <!-- Header -->
+    <div class="calculator__top">
+        <div class="brand">
+            <span class="brand__dot"></span>
+            <div class="brand__title">ماشین‌حساب</div>
+        </div>
+        <div class="subtle">v1</div>
+    </div>
+
+    <!-- Display -->
+    <section class="display" aria-live="polite">
+        <div id="memory" class="display__mem">&nbsp;</div>
+        <div id="display" class="display__value">0</div>
+    </section>
+
+    <!-- Keys -->
+    <div class="keys">
+
+        <!-- Row 1 -->
+        <button class="key key--action" data-action="clear">AC</button>
+        <button class="key key--action" data-action="neg">±</button>
+        <button class="key key--action" data-action="percent">%</button>
+        <button class="key key--operator" data-action="/">÷</button>
+
+        <!-- Row 2 -->
+        <button class="key key--number" data-digit="7">7</button>
+        <button class="key key--number" data-digit="8">8</button>
+        <button class="key key--number" data-digit="9">9</button>
+        <button class="key key--operator" data-action="*">×</button>
+
+        <!-- Row 3 -->
+        <button class="key key--number" data-digit="4">4</button>
+        <button class="key key--number" data-digit="5">5</button>
+        <button class="key key--number" data-digit="6">6</button>
+        <button class="key key--operator" data-action="-">−</button>
+
+        <!-- Row 4 -->
+        <button class="key key--number" data-digit="1">1</button>
+        <button class="key key--number" data-digit="2">2</button>
+        <button class="key key--number" data-digit="3">3</button>
+        <button class="key key--operator" data-action="+">+</button>
+
+        <!-- Row 5 -->
+        <button class="key key--number key--wide" data-digit="0">0</button>
+        <button class="key key--number" data-digit=".">.</button>
+        <button class="key key--equal" data-action="=">=</button>
+
+    </div>
+
+</main>
+
+<script src="src/index.js"></script>
 
 </body>
 </html>
