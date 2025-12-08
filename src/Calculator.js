@@ -1,4 +1,4 @@
-class Calculator {
+export default class Calculator {
     constructor() {
         this.reset();
     }
@@ -62,7 +62,7 @@ class Calculator {
             const precedence = {"+": 1, "-": 1, "*": 2, "/": 2};
 
             this.expression.forEach((token) => {
-                if (!isNaN(token)) {
+                                if (!isNaN(parseFloat(token)) && token.trim() !== "") {
                     outputQueue.push(parseFloat(token));
                 } else if (["+", "-", "*", "/"].includes(token)) {
                     while (
@@ -88,10 +88,10 @@ class Calculator {
                     const a = stack.pop();
 
                     if (a === undefined || b === undefined) {
-                        throw new Error("خطا");
+                                                throw new Error("Invalid expression: insufficient operands");
                     }
 
-                    let result = 0;
+                                        let result;
                     switch (token) {
                         case "+":
                             result = a + b;
