@@ -1,0 +1,152 @@
+:root {
+    --bg: #f3f5f9;
+    --panel: #ffffff;
+    --text-dark: #0b1628;
+    --text-muted: #6b7280;
+
+    --num-bg: rgba(0, 0, 0, 0.04);
+    --num-shadow: rgba(2, 6, 23, 0.15);
+
+    --op-bg: #ecebff;
+    --op-text: #4030a6;
+
+    --action-bg: #ffe9e9;
+    --action-text: #c00000;
+
+    --equal-bg: linear-gradient(180deg, #ff8c42, #ff5c5c);
+
+    --radius: 14px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Layout */
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--bg);
+    margin: 0;
+    padding: 24px;
+}
+
+/* Shell */
+.calculator {
+    max-width: 420px;
+    width: 100%;
+    padding: 20px;
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: 0 10px 30px rgba(2, 6, 23, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Header */
+.calculator__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.brand {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.brand__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ff8c42;
+}
+.brand__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+.subtle {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Display */
+.display {
+    background: #fdfdfd;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 80px;
+}
+.display__mem {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+}
+.display__value {
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    direction: ltr;
+}
+
+/* Keys Grid */
+.keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+/* Base key */
+.key {
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    transition: .1s ease;
+}
+
+/* Number keys */
+.key--number {
+    background: var(--num-bg);
+    color: var(--text-dark);
+    box-shadow: 0 3px 6px var(--num-shadow);
+}
+
+/* Operator keys */
+.key--operator {
+    background: var(--op-bg);
+    color: var(--op-text);
+    font-weight: 600;
+}
+
+/* Action keys: AC, ±, % */
+.key--action {
+    background: var(--action-bg);
+    color: var(--action-text);
+    font-weight: 700;
+}
+
+/* Equal */
+.key--equal {
+    background: var(--equal-bg);
+    color: white;
+    font-weight: 800;
+    grid-column: span 2;
+}
+
+/* Wide 0 */
+.key--wide {
+    grid-column: span 2;
+    text-align: left;
+    padding-left: 22px;
+}
+
+/* Active effect */
+.key:active {
+    transform: translateY(2px);
+}
