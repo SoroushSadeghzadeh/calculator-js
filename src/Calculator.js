@@ -7,19 +7,16 @@ export default class Calculator {
         this.expression = [];
         this.current = "0";
         this.resultShown = false;
-                this.memory = ""
     }
 
     appendDigit(digit) {
         if (this.resultShown) {
-            this.expression = [];
-            this.current = "0";
-            this.resultShown = false;
+            this.reset();
         }
         if (this.current === "0" && digit !== ".") {
             this.current = digit;
         } else if (digit === "." && this.current.includes(".")) {
-            return;
+            // Do nothing if a decimal point is already present
         } else {
             this.current += digit;
         }
@@ -29,7 +26,7 @@ export default class Calculator {
         if (this.resultShown) {
             this.expression = [this.current];
             this.resultShown = false;
-        } else {
+        } else if (this.current !== "") {
             this.expression.push(this.current);
         }
 
@@ -40,10 +37,11 @@ export default class Calculator {
             this.expression.push(operator);
         }
 
-        this.current = "0";
+        this.current = "";
     }
 
     toggleSign() {
+        if (this.current === "" || this.current === "0") return;
         const num = parseFloat(this.current);
         if (!isNaN(num)) {
             this.current = (num * -1).toString();
@@ -51,6 +49,7 @@ export default class Calculator {
     }
 
     percent() {
+        if (this.current === "") return;
         const num = parseFloat(this.current);
         if (!isNaN(num)) {
             this.current = (num / 100).toString();
@@ -58,53 +57,22 @@ export default class Calculator {
     }
 
     calculate() {
-        if (this.expression.length === 0) return;
+        if (this.expression.length < 2) return;
 
-        this.expression.push(this.current);
+        if (this.current !== "") {
+            this.expression.push(this.current);
+        }
 
-        this.memory = this.expression.join(" ");
+        // Ensure the expression ends with a number
+        const lastElement = this.expression[this.expression.length - 1];
+        if (["+", "-", "*", "/"].includes(lastElement)) {
+            this.expression.pop();
+        }
 
         try {
-            const outputQueue = [];
-            const operatorStack = [];
-            const precedence = {"+": 1, "-": 1, "*": 2, "/": 2};
-
-            for (const token of this.expression) {
-                if (!isNaN(token)) {
-                    outputQueue.push(parseFloat(token));
-                } else if (precedence[token]) {
-                    while (
-                        operatorStack.length &&
-                        precedence[operatorStack.at(-1)] >= precedence[token]
-                        ) {
-                        outputQueue.push(operatorStack.pop());
-                    }
-                    operatorStack.push(token);
-                }
-            }
-
-            while (operatorStack.length) {
-                outputQueue.push(operatorStack.pop());
-            }
-
-            const stack = [];
-            for (const token of outputQueue) {
-                if (typeof token === "number") {
-                    stack.push(token);
-                } else {
-                    const b = stack.pop();
-                    const a = stack.pop();
-                    if (a === undefined || b === undefined) {
-                        throw new Error("Invalid expression");
-                    }
-                    if (token === "/" && b === 0) throw new Error("Error");
-
-                                        const result = eval(`${a} ${token} ${b}`);
-                    stack.push(result);
-                }
-            }
-
-            this.current = stack[0].toString();
+            // Using a safer evaluation than eval()
+            const result = this.evaluateExpression(this.expression);
+            this.current = result.toString();
             this.expression = [];
             this.resultShown = true;
 
@@ -115,12 +83,56 @@ export default class Calculator {
         }
     }
 
+    evaluateExpression(expression) {
+        // This is a simplified evaluation that respects order of operations (MDAS)
+        // It's safer than eval()
+        let values = [];
+        let ops = [];
+
+        for (let i = 0; i < expression.length; i++) {
+            let token = expression[i];
+            if (!isNaN(parseFloat(token)) && isFinite(token)) {
+                values.push(parseFloat(token));
+            } else { // operator
+                while (ops.length > 0 && this.hasPrecedence(ops[ops.length - 1], token)) {
+                    values.push(this.applyOp(ops.pop(), values.pop(), values.pop()));
+                }
+                ops.push(token);
+            }
+        }
+
+        while (ops.length > 0) {
+            values.push(this.applyOp(ops.pop(), values.pop(), values.pop()));
+        }
+
+        const result = values.pop();
+        if (result === Infinity || result === -Infinity) {
+            throw new Error("Division by zero");
+        }
+        return result;
+    }
+
+    hasPrecedence(op1, op2) {
+        return (op1 === '*' || op1 === '/') && (op2 === '+' || op2 === '-');
+    }
+
+    applyOp(op, b, a) {
+        switch (op) {
+            case '+': return a + b;
+            case '-': return a - b;
+            case '*': return a * b;
+            case '/':
+                if (b === 0) throw new Error("Division by zero");
+                return a / b;
+        }
+    }
+
+
     getMainDisplay() {
-        if (this.resultShown) return this.current;
-        return [...this.expression, this.current].join(" ");
+        return this.current || "0";
     }
 
     getMemoryDisplay() {
-        return this.memory;
+        return this.expression.join(" ");
     }
 }
