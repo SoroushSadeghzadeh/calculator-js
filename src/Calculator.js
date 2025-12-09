@@ -7,14 +7,15 @@ export default class Calculator {
         this.expression = [];
         this.current = "0";
         this.resultShown = false;
+                this.memory = ""
     }
 
     appendDigit(digit) {
         if (this.resultShown) {
+            this.expression = [];
             this.current = "0";
             this.resultShown = false;
         }
-
         if (this.current === "0" && digit !== ".") {
             this.current = digit;
         } else if (digit === "." && this.current.includes(".")) {
@@ -61,10 +62,12 @@ export default class Calculator {
 
         this.expression.push(this.current);
 
+        this.memory = this.expression.join(" ");
+
         try {
             const outputQueue = [];
             const operatorStack = [];
-            const precedence = { "+": 1, "-": 1, "*": 2, "/": 2 };
+            const precedence = {"+": 1, "-": 1, "*": 2, "/": 2};
 
             for (const token of this.expression) {
                 if (!isNaN(token)) {
@@ -96,7 +99,7 @@ export default class Calculator {
                     }
                     if (token === "/" && b === 0) throw new Error("Error");
 
-                    const result = eval(`${a} ${token} ${b}`);
+                                        const result = eval(`${a} ${token} ${b}`);
                     stack.push(result);
                 }
             }
@@ -112,7 +115,12 @@ export default class Calculator {
         }
     }
 
-    getDisplay() {
-        return this.current;
+    getMainDisplay() {
+        if (this.resultShown) return this.current;
+        return [...this.expression, this.current].join(" ");
+    }
+
+    getMemoryDisplay() {
+        return this.memory;
     }
 }

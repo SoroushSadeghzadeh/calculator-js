@@ -12,8 +12,8 @@ const keys = document.querySelectorAll(".key");
 
 // Function to update the display
 function updateDisplay() {
-    display.textContent = calculator.getDisplay();
-    memory.textContent = calculator.expression.join(" "); // Display current expression in memory
+    display.textContent = calculator.getMainDisplay();
+        memory.textContent = calculator.getMemoryDisplay(); // Display current expression in memory
 }
 
 // Add event listener to all buttons
