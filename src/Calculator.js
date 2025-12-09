@@ -10,7 +10,6 @@ export default class Calculator {
     }
 
     appendDigit(digit) {
-        // اگر نتیجه قبلی نمایش داده شده و کاربر عدد زد → ریست شود
         if (this.resultShown) {
             this.current = "0";
             this.resultShown = false;
@@ -26,7 +25,6 @@ export default class Calculator {
     }
 
     appendOperator(operator) {
-        // اگر نتیجه قبلاً نشان داده شده بود
         if (this.resultShown) {
             this.expression = [this.current];
             this.resultShown = false;
@@ -36,7 +34,6 @@ export default class Calculator {
 
         const last = this.expression[this.expression.length - 1];
         if (["+", "-", "*", "/"].includes(last)) {
-            // جایگزینی اپراتور
             this.expression[this.expression.length - 1] = operator;
         } else {
             this.expression.push(operator);
@@ -97,7 +94,7 @@ export default class Calculator {
                     if (a === undefined || b === undefined) {
                         throw new Error("Invalid expression");
                     }
-                    if (token === "/" && b === 0) throw new Error("خطا");
+                    if (token === "/" && b === 0) throw new Error("Error");
 
                     const result = eval(`${a} ${token} ${b}`);
                     stack.push(result);
@@ -109,7 +106,7 @@ export default class Calculator {
             this.resultShown = true;
 
         } catch (err) {
-            this.current = "خطا";
+            this.current = "Error";
             this.expression = [];
             this.resultShown = true;
         }
